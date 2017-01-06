@@ -1,13 +1,13 @@
 {
-  "name": "rikai-discord",
+  "name": "rikai-dono",
   "version": "1.0.0",
   "description": "",
-  "main": "rikai-discord.js",
+  "main": "setup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Alexander Ivanov",
+  "license": "MIT",
   "dependencies": {
     "asar": "^0.12.4",
     "fs-extra": "^1.0.0",

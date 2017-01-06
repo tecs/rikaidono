@@ -52,29 +52,7 @@ eval(fs.readFileSync(chrome.extension.getUrl('background.js')).toString());
 
 module.exports = (window) => {
     MainWindow = window;
-    MainWindow.webContents.executeJavaScript("\
-const {ipcRenderer} = require('electron');\
-ipcRenderer.send('rikai-init', null);\
-const chrome = {\
-    extension: {\
-        __counter: 0,\
-        getUrl: uri => 'file://" + chrome.extension.getUrl('') + "' + uri,\
-        sendMessage: (data, callback) => {\
-            const callbackId = callback ? 'rikai-callback-' + (++chrome.extension.__counter) : null;\
-            ipcRenderer.send('rikai-back', {callback: callbackId, payload: data});\
-            if (callbackId) {\
-                ipcRenderer.once(callbackId, callback);\
-            }\
-        }\
-    },\
-    runtime: {\
-        onMessage: {\
-            __listeners: [],\
-            addListener: f => chrome.runtime.onMessage.__listeners.push(f)\
-        }\
-    }\
-};\
-ipcRenderer.on('rikai-front', (event, data) => chrome.runtime.onMessage.__listeners.forEach(f => f(data, null, null)));\
-    ");
+    MainWindow.webContents.executeJavaScript("const RIKAI_BASE_URL = '" + chrome.extension.getUrl('') + "'");
+    MainWindow.webContents.executeJavaScript(fs.readFileSync(chrome.extension.getUrl('chrome-api-polyfill.js')).toString());
 };
 

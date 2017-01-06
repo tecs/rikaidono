@@ -3,7 +3,8 @@
 // TODO: Find this automatically
 const discordPath = '/usr/share/discord-canary/resources';
 const unpackPath = __dirname + '/unpack';
-const extensionPath = discordPath + '/rikaikun';
+const targetPath = discordPath + '/rikai';
+const extensionPath = targetPath + '/rikaikun';
 const asarPath = discordPath + '/app.asar';
 
 const fs = require('fs-extra');
@@ -19,7 +20,7 @@ const install = () => {
         .toString()
         .replace(
             /(mainWindow\.loadURL)/,
-            "mainWindow.webContents.on('did-finish-load', () => require('../rikai')(mainWindow));\n    $1"
+            "mainWindow.webContents.on('did-finish-load', () => require('../rikai/rikai-dono')(mainWindow));\n    $1"
         );
     fs.writeFileSync(unpackPath + '/index.js', indexFile);
 
@@ -32,7 +33,7 @@ const install = () => {
         console.log('Creating a backup and deploying patched application...');
         fs.renameSync(asarPath, asarPath + '.bak');
         fs.renameSync(__dirname + '/app.asar', asarPath);
-        fs.copySync(__dirname + '/rikai.js', discordPath + '/rikai.js');
+        fs.copySync(__dirname + '/src', targetPath);
 
         console.log('Cleaning up temporary files...');
         fs.removeSync(unpackPath);
@@ -41,13 +42,18 @@ const install = () => {
     });
 };
 
-if (fs.existsSync(extensionPath)) {
+if (fs.existsSync(targetPath)) {
     console.log('Extension files found, skipping download.')
     install();
 } else {
+    fs.mkdirSync(targetPath);
     console.log('Downloading extension files...');
     ghdownload({user: 'melink14', repo: 'rikaikun'}, extensionPath)
-        .on('error', (error) => console.error(error))
-        .on('end', install)
+        .on('end', (e) => {
+            if (e) {
+                return console.error(e);
+            }
+            install();
+        })
 }
 
