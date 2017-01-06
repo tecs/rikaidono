@@ -21,6 +21,10 @@ const install = () => {
         .replace(
             /(mainWindow\.loadURL)/,
             "mainWindow.webContents.on('did-finish-load', () => require('../rikai/rikai-dono')(mainWindow));\n    $1"
+        )
+        .replace(
+            /(webPreferences: {)/,
+            "$1\n        webSecurity: false,"
         );
     fs.writeFileSync(unpackPath + '/index.js', indexFile);
 
