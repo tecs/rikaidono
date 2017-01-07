@@ -20,7 +20,7 @@ const chrome = {
     }
 };
 ipcRenderer.on('rikai-front', (event, data) => chrome.runtime.onMessage.__listeners.forEach(f => f(data, null, null)));
-ipcRenderer.on('rikai-log', (event, data) => console.log(data));
+ipcRenderer.on('rikai-error', (event, data) => console.error(data));
 
 setInterval(() => {
     const toolbars = document.getElementsByClassName('header-toolbar');
@@ -32,6 +32,8 @@ setInterval(() => {
     const span = document.createElement('span');
     span.style.backgroundImage = 'url(' + chrome.extension.getURL('images/ba.png') + ')';
     button.appendChild(span);
-    button.onclick = () => chrome.extension.sendMessage('rikai-toggle');
+    button.onclick = () => ipcRenderer.send('rikai-toggle', null);
+    button.oncontextmenu = () => {};
     toolbars[0].insertBefore(button, toolbars[0].children[0]);
 }, 5000);
+

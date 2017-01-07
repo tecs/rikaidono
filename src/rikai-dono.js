@@ -3,8 +3,12 @@
 const fs = require('fs');
 
 const {ipcMain} = require('electron');
-const localStorage = {};
-const alert = data => sender.send("rikai-log", data);
+const localStorage = {
+    onlyreading: "false",
+    showOnKey: "",
+    disablekeys: "true"
+};
+const alert = data => sender.send("rikai-error", data);
 
 let i = 0;
 let sender = null;
@@ -46,7 +50,11 @@ ipcMain.on('rikai-back', (event, data) => {
         data.payload.entry.data = [];
     }
     const callback = data.callback ? (response) => sender.send(data.callback, response) : null;
-    chrome.runtime.onMessage.__listeners.forEach(f => f(data.payload, {tab: {id: 0}}, callback));
+    try {
+        chrome.runtime.onMessage.__listeners.forEach(f => f(data.payload, {tab: {id: 0}}, callback));
+    } catch (error) {
+        sender.send("rikai-error", error.message);
+    }
 });
 ipcMain.on('rikai-toggle', (event, data) => chrome.browserAction.onClicked.__listeners.forEach(f => f(0)));
 
