@@ -3,7 +3,6 @@
 const fs = require('fs');
 
 const {ipcMain} = require('electron');
-const windows = [{tabs: [{id: 0}]}];
 const localStorage = {};
 const alert = data => sender.send("rikai-log", data);
 
@@ -37,7 +36,7 @@ const chrome = {
         }
     },
     windows: {
-        getAll: (data, f) => f(windows)
+        getAll: (data, f) => f([{tabs: [{id: 0}]}])
     }
 };
 
@@ -56,7 +55,7 @@ eval(
     fs.readFileSync(__dirname + '/rikaikun/data.js').toString() +
     fs.readFileSync(__dirname + '/rikaikun/rikaichan.js').toString() +
     fs.readFileSync(__dirname + '/rikaikun/background.js').toString() +
-    'rcxDict.prototype.fileRead = (url, charset) => fs.readFileSync(url.replace("file://", "")).toString();'
+    'rcxDict.prototype.fileRead = (url, charset) => fs.readFileSync(url).toString();'
 );
 
 module.exports = (window) => {
