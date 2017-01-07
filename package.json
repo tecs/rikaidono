@@ -1,7 +1,7 @@
 {
   "name": "rikaidono",
   "version": "1.0.0",
-  "description": "A Rikaichan implementation for Discord",
+  "description": "A Rikaichan port for Discord",
   "main": "setup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
