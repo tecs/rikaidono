@@ -42,7 +42,7 @@ const install = () => {
         .toString()
         .replace(
             /(mainWindow\.loadURL)/,
-            "mainWindow.webContents.on('did-finish-load', () => require('../rikai/rikai-dono')(mainWindow));\n    $1"
+            "mainWindow.webContents.on('did-finish-load', () => require('../rikai/rikaidono')(mainWindow));\n    $1"
         )
         .replace(
             /(webPreferences: {)/,
