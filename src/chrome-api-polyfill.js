@@ -24,8 +24,13 @@ ipcRenderer.on('rikai-error', (event, data) => console.error(data));
 
 setInterval(() => {
     const toolbars = document.getElementsByClassName('header-toolbar');
-    if (!toolbars.length || toolbars[0].children[0].id === 'rikai-toggle') {
+    if (!toolbars.length) {
         return;
+    }
+    for (let i = 0; i < toolbars[0].children.length; ++i) {
+        if (toolbars[0].children[i].id === 'rikai-toggle') {
+            return;
+        }
     }
     const button = document.createElement('button');
     button.id = 'rikai-toggle';
