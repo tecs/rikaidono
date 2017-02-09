@@ -17,7 +17,10 @@ switch (process.platform) {
         break;
 
     case 'linux':
-        discordPath = '/usr/share/discord-canary/resources';
+        discordPath = '/usr/share/discord/resources';
+        if (!fs.existsSync(discordPath)) {
+            discordPath = '/usr/share/discord-canary/resources';
+        }
         break;
 
     default:
